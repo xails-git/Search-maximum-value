@@ -108,7 +108,7 @@ func main() {
 	fmt.Printf("Генерируем %d целых чисел", SIZE)
 	generateRandomElements(SIZE)
 
-	fmt.Println("Ищем максимальное значение в один поток")
+	fmt.Println("Ищём максимальное значение в один поток")
 
 	start := time.Now()
 	max := maximum(generateRandomElements(SIZE))
