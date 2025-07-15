@@ -53,17 +53,17 @@ func maxChunks(data []int) int {
 	}
 
 	var wg sync.WaitGroup
-	var mu sync.Mutex
 	chunkSize := (len(data) + CHUNKS - 1) / CHUNKS
 	maxValues := make([]int, CHUNKS)
 
 	for i := 0; i < CHUNKS; i++ {
+
+		start := i * chunkSize
+		end := start + chunkSize
+
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-
-			start := i * chunkSize
-			end := start + chunkSize
 			if start >= len(data) {
 				return
 			}
@@ -76,16 +76,10 @@ func maxChunks(data []int) int {
 				return
 			}
 
-			max := chunk[0]
-			for _, num := range chunk {
-				if num > max {
-					max = num
-				}
-			}
+			max := maximum(chunk)
 
-			mu.Lock()
 			maxValues[i] = max
-			mu.Unlock()
+
 		}(i)
 	}
 	wg.Wait()
@@ -93,13 +87,8 @@ func maxChunks(data []int) int {
 	if len(maxValues) == 0 {
 		return 0
 	}
-	counter := maxValues[0]
-	for _, val := range maxValues {
-		if val > counter {
-			counter = val
-		}
-	}
 
+	counter := maximum(maxValues)
 	return counter
 }
 
